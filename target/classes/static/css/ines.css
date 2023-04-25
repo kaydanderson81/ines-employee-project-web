@@ -1,0 +1,32 @@
+h1 {
+  color: #7d7d7f;
+  text-align: center;
+}
+
+.subContainer{
+    float: left;
+}
+
+.subContainer #squareButtons {
+    width: 100%;
+    text-align: center;
+}
+
+#username {
+	margin: 20px;
+}
+
+#squareButtons {
+	text-align: center;
+	margin: 0px;
+}
+
+#squareButtons a {
+	padding-top: 50px;
+	width: 130px;
+  	height: 130px;
+ 	background-color: #eeeeee;
+ 	border-radius: 8px;
+ 	margin-right: 20px;
+}
+

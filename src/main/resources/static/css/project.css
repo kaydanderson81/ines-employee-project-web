@@ -1,0 +1,38 @@
+table {
+    font-size: 12px;
+}
+
+#yellowWarning {
+    color: #ffd43b;
+}
+
+#deleteButton {
+    color: #fe635f;
+    font-size: 17px;
+}
+
+#updateProject {
+    font-size: 17px;
+}
+
+h1 a {
+    color: black;
+}
+
+h1:hover a {
+    color: #343a40;
+    text-decoration: none;
+}
+
+form input {
+    max-width: 300px;
+}
+
+#commentTextarea {
+    max-width: 700px;
+}
+
+form .input-group-addon {
+    width: 0%;
+}
+

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link th:href="@{/css/fontawesome/css/all.css}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/navbar.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/addProject.css}">
+    <title>InES Employee</title>
+</head>
+<body>
+<div th:replace="/fragments/chartNavbar :: navbar"></div>
+<div class="container">
+    <h1>Employee Management System</h1>
+    <hr>
+
+    <form action="#" th:action="@{/ines/addProjectToEmployee/{id}(id=${employee.id})}" th:object="${employee}"
+          method="POST">
+        <input type="hidden" th:field="*{id}" />
+
+        <h2>Add Project to Employee: [[*{name}]]</h2>
+        <label>Current Projects: </label>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6">
+                    <table class="table table-responsive">
+                        <tr>
+                            <th>Project name:</th>
+                            <th>Start date:</th>
+                            <th>End date:</th>
+                        </tr>
+                        <tr th:each="emplProj : ${employeeSavedProject}">
+                            <td type="text" th:text="${emplProj.project.name}" th:value="${emplProj.id}"></td>
+                            <td type="text" th:text="${emplProj.employeeProjectStartDate}" th:value="${emplProj.id}"></td>
+                            <td type="text" th:text="${emplProj.employeeProjectEndDate}" th:value="${emplProj.id}"></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-sm-6">
+                    <label>Info: Tick the checkbox and add and employee's start and end date to save that particular
+                        project for the above employee.</label>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div>
+                <label>Add projects: </label>
+                <div class="col-sm-6" th:each="project : ${projects}">
+                    <div class="form-group blu-margin">
+                        <input type="checkbox" th:name="projectId" th:text="${project.name}" th:value="${project.id}">
+                        <input type="date" th:name="employeeProjectStartDate" th:value="${employeeProjectStartDate}"
+                               class="form-control mb-4 col-4">
+                        <input type="date" th:name="employeeProjectEndDate" th:value="${employeeProjectEndDate}"
+                               class="form-control mb-4 col-4">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-info col-2">Save Employee</button>
+    </form>
+
+    <hr>
+
+    <a th:href = "@{/ines/employees}"> Back to Employee List</a>
+</div>
+<script th:src="@{/js/navbar.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery-3.6.0.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap/bootstrap.min.js}"></script>
+</body>
+</html>

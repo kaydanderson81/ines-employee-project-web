@@ -1,0 +1,45 @@
+Added on this date:
+01-02-23
+Added labels to new_project and new_employees
+
+06-02-23
+Added Comment option to Projects
+#launched
+
+21-02-23
+Added labels for chemicals
+Fixed Project edit
+#launched
+
+Changed project PM label
+check project number exists, pagination refresh/project home
+employeeProject no date set and allow multiple employeeProjects (once set, isnt in addList anymore)
+#launched
+
+
+27-02-23
+Add project to employee in alphabetical order
+TODO: Fix chart year (add year to url {id})
+
+02-03-23
+Added padding and margin to addNewEmployee (seems to work, didn't work the first time)
+
+03-03-23
+Added bar chart in date order
+Removed employee from chart if not in that year
+
+13-3-23
+TODO: fixing chart, it adds the 2 separate stacks together
+Meeting app, fix delete and allow empty fields
+
+31-3-23
+Check name length in employees table
+
+
+12-4-23
+Added first and second name, employees ordered by last name and added accordion
+
+13-4-23
+TODO: When adding Project number error if not a number, big box for comment
+!!!!!Change database!!!!!!
+

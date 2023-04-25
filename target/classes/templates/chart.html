@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link th:href="@{/css/fontawesome/css/all.css}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/navbar.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/graph.css}">
+    <title>Chart</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+
+</head>
+<body>
+<div th:replace="/fragments/chartNavbar :: navbar"></div>
+<div class="container">
+        <div class="d-flex">
+            <h2>Chart for [[${currentYear}]]</h2>
+        </div>
+        <div class="d-flex">
+            <div id="selectYear" class="p-2">
+                <p>Select Sheet Year:</p>
+            </div>
+            <div class="p-2">
+                <form th:action="@{/ines/chart}" th:object="${chartYear}" method="post">
+                    <select class="form-control" id="year" name="year" onchange="this.form.submit()">
+                        <option></option>
+                        <option th:each="year : ${yearList}" th:value="${year}"
+                                th:text="${year}" th:selected="${year == currentYear}">
+
+                        </option>
+                    </select>
+                </form>
+            </div>
+        </div>
+        <div class="myChartDiv">
+            <canvas id="myChart" width="900" height="600"></canvas>
+        </div>
+    <hr>
+        <div>
+            <h3>Project Months to Months booked</h3>
+        </div>
+        <div>
+            <canvas id="myBarChart"></canvas>
+        </div>
+
+</div>
+    <script th:inline="javascript">
+        var listEmployees = [[${employees}]];
+        var listProjects = [[${projects}]];
+
+
+    </script>
+<script th:src="@{/js/navbar.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery-3.6.0.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap/bootstrap.min.js}"></script>
+<script th:src="@{/js/graphTest.js}"></script>
+<script th:src="@{/js/projectChart.js}"></script>
+</body>
+</html>

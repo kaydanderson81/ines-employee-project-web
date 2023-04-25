@@ -1,0 +1,23 @@
+<div th:fragment="navbar" xmlns:th="http://www.w3.org/1999/xhtml">
+	<nav class="navbar navbar-expand-sm">
+		<div class="collapse navbar-collapse" id="navbarNavDropdown">
+			<ul class="navbar-nav">
+				<li class="nav-item dropdown">
+					<a class="nav-link" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<i id="barIcon" class="fa fa-bars" aria-hidden="true"></i>
+					</a>
+			<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+				<a th:href="@{/ines/home}" class="dropdown-item">Home</a>
+				<a th:href="@{/ines/employees}" class="dropdown-item">Employees</a>
+				<a th:href="@{/ines/projects}" class="dropdown-item">Projects</a>
+				<a th:href="@{/ines/chart}" class="dropdown-item">Charts</a>
+<!--				<a th:href="@{/ines/chart/{year}(year=${#dates.year(#dates.createNow())})}" class="dropdown-item">Charts</a>-->
+			</div>
+				</li>
+			</ul>
+			<div class="logo" title="InES Uni Page">
+				<a th:href="@{https://www.tu-braunschweig.de/en/ines}"><img th:src="@{/images/logo_INES.png}" alt="Logo"></a>
+			</div>
+		</div>
+	</nav>
+</div>	

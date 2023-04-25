@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link th:href="@{/css/fontawesome/css/all.css}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/navbar.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/project.css}">
+    <title>InES Employee</title>
+</head>
+<body>
+<div th:replace="/fragments/chartNavbar :: navbar"></div>
+<div class="container">
+    <h1>Projects</h1>
+    <hr>
+    <div class="row">
+        <div class="col-sm-6">
+            <h2>Save Project</h2>
+            <div id="alert" class="alert alert-warning alert-dismissible date show" role="alert" th:text="${failed}" th:if="${failed}"></div>
+            <form action="#" th:action="@{/ines/saveProject}" th:object="${project}"
+                  method="POST">
+                <label>Project Serial Number</label>
+                <input type="text" th:field="*{projectNumber}"
+                       placeholder="Project Number" class="form-control mb-4 col-6">
+                <label>Project Name</label>
+                <input type="text" th:field="*{name}"
+                       placeholder="Name" class="form-control mb-4 col-6">
+                <label>Project Start Date</label>
+                <input type="date" th:field="*{startDate}"
+                       placeholder="Project start date" class="form-control mb-4 col-6">
+                <label>Project End Date</label>
+                <input type="date" th:field="*{endDate}"
+                       placeholder="Project end date" class="form-control mb-4 col-6">
+                <label>Project Person Months (PM)</label>
+                <input type="text" th:field="*{projectLengthInMonths}" class="form-control mb-4 col-6">
+                <label>Comments</label>
+                <textarea id="commentTextArea" type="text" th:field="*{comment}"
+                          placeholder="Comment" class="form-control mb-4 col-4"></textarea>
+                <button type="submit" class="btn btn-info col-4"> Save Project</button>
+            </form>
+        </div>
+        <div class="col-sm-6">
+            <h4>How to add a project</h4>
+            <p>
+                Add the appropriate information into the given fields. Project Months are not calculated from the start
+                and end dates as project months can change without the start and end dates changing.
+            </p>
+            <p>
+                Click Save Project when complete.
+            </p>
+        </div>
+    </div>
+    <hr>
+    <a th:href = "@{/ines/projects}"> Back to Project List</a>
+    <hr>
+</div>
+<script th:src="@{/js/navbar.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery-3.6.0.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap/bootstrap.min.js}"></script>
+<script th:src="@{/js/project.js}"></script>
+</body>
+</html>

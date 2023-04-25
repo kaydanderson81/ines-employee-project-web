@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link th:href="@{/css/fontawesome/css/all.css}" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap/bootstrap.min.css}"/>
+	<link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{/css/navbar.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{/css/employees.css}">
+	<title>InES Employee</title>
+</head>
+<body>
+	<div th:replace="/fragments/chartNavbar :: navbar"></div>
+	<div class="container">
+		<h2>Save Employee</h2>
+		<hr>
+		<div id="alert" class="alert alert-warning alert-dismissible date show" role="alert" th:text="${failed}" th:if="${failed}"></div>
+		<div class="row d-flex justify-content-evenly">
+			<div>
+				<form action="#" th:action="@{/ines/saveEmployee}" th:object="${employee}"
+					  method="POST">
+					<div class="row">
+						<div class="col-sm-5">
+							<labe>First Name</labe>
+							<input type="text" th:field="*{firstName}"
+								   placeholder="First Name" required="required"  class="form-control col-8 mb-4">
+							<labe>Last Name</labe>
+							<input type="text" th:field="*{lastName}"
+								   placeholder="Last Name" required="required"  class="form-control col-8 mb-4">
+							<label>Employee Contract Start Date</label>
+							<input type="date" th:field="*{contractedFrom}"
+								   placeholder="Contracted From" required="required"  class="form-control col-8 mb-4">
+							<label>Project Contract End Date</label>
+							<input type="date" th:field="*{contractedTo}"
+								   placeholder="Contracted To" required="required"  class="form-control col-8 mb-4">
+						</div>
+						<div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0">
+							<h4>How to add an employee</h4>
+							<p>
+								Add employee name and start and end dates, then when assigning an employee to a project, tick the
+								project box and add the dates this employee will work on this project. You can add multiple projects
+								to one employee.
+							</p>
+							<p>
+								Click Save Employee once all information is added and projects are selected.
+							</p>
+						</div>
+					</div>
+					<hr>
+					<div class="row d-flex justify-content-around">
+						<div class="form-group blu-margin" th:each="project : ${projects}">
+
+								<div class="form-group blu-margin">
+									<input type="checkbox" th:name="projectId" th:text="${project.name}" th:value="${project.id}">
+									<input type="date" th:name="employeeProjectStartDate" th:value="${employeeProjectStartDate}"
+										   class="form-control mb-4 col-4">
+									<input type="date" th:name="employeeProjectEndDate" th:value="${employeeProjectEndDate}"
+										   class="form-control mb-4 col-4">
+								</div>
+
+						</div>
+
+					</div>
+					<button type="submit" class="btn btn-info col-2">Save Employee</button>
+				</form>
+			</div>
+		</div>
+		<hr>
+		<a th:href = "@{/ines/employees}"> Back to Employee List</a>
+		<hr>
+	</div>
+	<script th:src="@{/js/employee.js}"></script>
+	<script type="text/javascript" th:src="@{/js/jquery-3.6.0.js}"></script>
+	<script type="text/javascript" th:src="@{/js/bootstrap/bootstrap.min.js}"></script>
+</body>
+</html>

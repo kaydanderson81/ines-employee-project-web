@@ -1,0 +1,25 @@
+.navbar {
+    background: #175a8e;
+    padding-top: 0 !important;
+        padding-bottom: 0 !important;
+ }
+
+ .logo{
+    left: 50%;
+    position: relative;
+    transform: translateX(-50%);
+ }
+
+ img{
+    height: 30px;
+    display: block;
+ }
+
+ #barIcon {
+    color: white;
+ }
+
+#selectYear p {
+    padding-top: 5px;
+}
+
