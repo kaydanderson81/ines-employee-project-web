@@ -69,43 +69,22 @@ public class EmployeeController {
 		projects.sort(Comparator.comparing(Project::getName));
 		model.addAttribute("employee", employee);
 		model.addAttribute("projects", projects);
+		model.addAttribute("employeeProjects", new EmployeeProject());
 		return "new_employee";
 	}
 
 
+
+
 	@PostMapping("/saveEmployee")
 	public String saveEmployee(@ModelAttribute("employee") Employee employee,
-							   @RequestParam("projectId") List<Project> projectIds,
-							   @RequestParam("employeeProjectStartDate") List<String> employeeProjectStartDate,
-							   @RequestParam("employeeProjectEndDate") List<String> employeeProjectEndDate,
-//							   @RequestParam(value = "confirmBooking", required = false) List<String> confirmBooking,
-//							   @RequestParam("confirmBookingHidden") List<String> confirmBookingHidden,
+								@ModelAttribute EmployeeProject employeeProjects,
 							   RedirectAttributes redirectAttributes) {
 
-//		List<Boolean> confirmBookingList = new ArrayList<>();
-//
-//		for (int i = 0; i < projectIds.size(); i++) {
-//			String checkboxValue = confirmBooking.get(i);
-//			String hiddenValue = confirmBookingHidden.get(i);
-//
-//			if (checkboxValue != null) {
-//				confirmBookingList.add(Boolean.valueOf(checkboxValue));
-//			} else {
-//				confirmBookingList.add(Boolean.valueOf(hiddenValue));
-//			}
-//		}
+		String validationError = ProjectWarning.validateEmployeeProject(employeeProjects);
 
-//		System.out.println("Booking: " + confirmBookingList);
-//		System.out.println("Booking: " + confirmBookingList.size());
-
-//		confirmBooking.removeAll(Arrays.asList(null, ""));
-
-		employeeProjectStartDate.removeAll(Arrays.asList(null, ""));
-		employeeProjectEndDate.removeAll(Arrays.asList(null, ""));
-
-
-		if (employeeProjectStartDate.size() != employeeProjectEndDate.size()) {
-			redirectAttributes.addFlashAttribute("failed", "An employee project start date and end date must be entered.");
+		if (!validationError.isEmpty()) {
+			redirectAttributes.addFlashAttribute("failed", validationError);
 			return "redirect:/ines/showNewEmployeeForm";
 		}
 
@@ -115,23 +94,12 @@ public class EmployeeController {
 			return "redirect:/ines/showNewEmployeeForm";
 		}
 
-		if (ProjectWarning.ifProjectStartDateIsNotSetCorrectly(employeeProjectStartDate)) {
-			redirectAttributes.addFlashAttribute("failed", "Employee project start date day must be the 1st or " +
-					"15th. Please check dates entered.");
-			return "redirect:/ines/showNewEmployeeForm";
-		}
+		double bookedMonths =
+				employeeService.getEmployeeBookedMonths(employeeProjects.getEmployeeProjectStartDate(),
+															  employeeProjects.getEmployeeProjectEndDate());
+		employeeProjects.setEmployeeBookedMonths(bookedMonths);
 
-		if (ProjectWarning.ifProjectEndDateIsNotSetCorrectly(employeeProjectEndDate)) {
-			redirectAttributes.addFlashAttribute("failed", "Employee project end date day must be the 14th or the " +
-					"last day of the month. Please check dates entered.");
-			return "redirect:/ines/showNewEmployeeForm";
-		}
-
-		List<Double> monthList = employeeService.getListOfEmployeeBookedMonths(employeeProjectStartDate, employeeProjectEndDate);
-
-		employeeService.saveEmployeeProjectToEmployee(employee, projectIds, monthList,
-				employeeProjectStartDate, employeeProjectEndDate);
-
+		employeeService.saveEmployee(employee, employeeProjects);
 		return "redirect:/ines/employees";
 	}
 
@@ -154,7 +122,7 @@ public class EmployeeController {
 		if (employee.getContractedTo().isEmpty()) {
 			updatedEmployee.setContractedTo("Date not set");
 		}
-		employeeService.saveEmployee(updatedEmployee);
+		employeeService.saveEmployee(updatedEmployee, null);
 		return "redirect:/ines/employees";
 	}
 	

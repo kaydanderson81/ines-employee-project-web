@@ -11,6 +11,7 @@ import com.web.model.Project;
 import com.web.repository.EmployeeProjectRepository;
 import com.web.repository.ProjectRepository;
 import com.web.service.employeeProject.EmployeeProjectService;
+import com.web.warnings.project.ProjectWarning;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,6 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.web.repository.EmployeeRepository;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -45,8 +47,15 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public Employee saveEmployee(Employee employee) {
+	public Employee saveEmployee(Employee employee, EmployeeProject employeeProject) {
 		employee.setName(employee.getFirstName(), employee.getLastName());
+		employeeProject.setEmployee(employee);
+		Project project = projectService.getProjectById(employeeProject.getProject().getId());
+		employeeProject.setProject(project);
+		employeeProject.setEmployeeProjectName(project.getName());
+		List<EmployeeProject> employeeProjects = new ArrayList<>();
+		employeeProjects.add(employeeProject);
+		employee.setEmployeeProject(employeeProjects);
 		return this.employeeRepository.save(employee);
     }
 
@@ -76,7 +85,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public void saveEmployeeProjectToEmployee(
 		Employee employee, List<Project> projectIds, List<Double> monthList,
 		List<String> employeeProjectStartDate, List<String> employeeProjectEndDate) {
-		saveEmployee(employee);
+		saveEmployee(employee, null);
 		for (int i=0; i< projectIds.size(); i++) {
 			EmployeeProject employeeProject = new EmployeeProject(employee);
 			employeeProject.setEmployeeBookedMonths(monthList.get(i));
@@ -93,37 +102,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 		}
 	}
 
-
-	@Override
-	public List<Double> getListOfEmployeeBookedMonths(List<String> startDates, List<String> endDates) {
-		List<Double> monthList = new ArrayList<>();
-		startDates.removeAll(Collections.singleton(""));
-		endDates.removeAll(Collections.singleton(""));
-		for (int i=0; i< startDates.size(); i++) {
-			double monthsBetween = ChronoUnit.MONTHS.between(
-					LocalDate.parse(startDates.get(i)),
-					LocalDate.parse(endDates.get(i)).plusDays(1));
-			String subStart = startDates.get(i).substring(startDates.get(i).length() - 2);
-			String subEnd = endDates.get(i).substring(endDates.get(i).length() - 2);
-			if (subStart.equals("15") && !subEnd.equals("14")) {
-				double v = monthsBetween + 0.5;
-				monthList.add(v);
-			}
-			if (!subStart.equals("15") && subEnd.equals("14")) {
-				double v = monthsBetween + 0.5;
-				monthList.add(v);
-			}
-			if (subStart.equals("15") && subEnd.equals("14") && monthsBetween < 0.5) {
-				double v = monthsBetween + 1;
-				monthList.add(v);
-			}if (subStart.equals("15") && subEnd.equals("14")) {
-				monthList.add(monthsBetween);
-			} else if (!subStart.equals("15") && !subEnd.equals("14")){
-				monthList.add(monthsBetween);
-			}
-		}
-		return monthList;
-	}
 
 	@Override
 	public Double getEmployeeBookedMonths(String startDates, String endDates) {
@@ -212,6 +190,4 @@ public class EmployeeServiceImpl implements EmployeeService {
 		Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
 		return this.employeeRepository.findAll(pageable);
 	}
-
-
 }

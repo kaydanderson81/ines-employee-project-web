@@ -13,6 +13,8 @@
 //    });
 //});
 
+setInterval(function(){ $(".alert").fadeOut(); }, 3000);
+
 $('#deleteProjectButton').on('click', function(event) {
         event.preventDefault();
         var href = $(this).attr('href');
@@ -20,7 +22,7 @@ $('#deleteProjectButton').on('click', function(event) {
         $('#deleteEmployeeProjectModal').modal();
     });
 
-setInterval(function(){ $(".alert").fadeOut(); }, 3000);
+
 
 $('#startDatePicker').datepicker({
     dateFormat: 'dd-mm-yy',

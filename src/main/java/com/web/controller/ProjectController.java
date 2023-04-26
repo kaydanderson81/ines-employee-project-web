@@ -77,41 +77,33 @@ public class ProjectController {
         List<EmployeeProject> findEmployeeProjects = employeeProjectRepository.findAllEmployeeProjectByEmployeeId(id);
         model.addAttribute("employee", employee);
         model.addAttribute("projects", projects);
+        model.addAttribute("employeeProject", new EmployeeProject());
         model.addAttribute("employeeSavedProject", findEmployeeProjects);
         return "project/add_Project_To_Employee";
     }
 
     @PostMapping("/addProjectToEmployee/{id}")
     public String addProjectToEmployee(@PathVariable( value = "id") long id,
-                                       @RequestParam("projectId") List<Project> projectIds,
-                                       @RequestParam("employeeProjectStartDate") List<String> employeeProjectStartDate,
-                                       @RequestParam("employeeProjectEndDate") List<String> employeeProjectEndDate,
+                                       @ModelAttribute("employee") Employee employee,
+                                       @ModelAttribute EmployeeProject employeeProject,
                                         RedirectAttributes redirectAttributes) {
 
-        List<Double> monthList = employeeService.getListOfEmployeeBookedMonths(employeeProjectStartDate, employeeProjectEndDate);
+        System.out.println("EP: " + employeeProject);
 
-        if (ProjectWarning.ifProjectStartDateIsNotSetCorrectly(employeeProjectStartDate)) {
-            redirectAttributes.addFlashAttribute("failed", "Employee project start date day must be the 1st or " +
-                    "15th. Please check dates entered.");
-                return "redirect:/ines/showFormForAddProjectToEmployee/{id}";
+        String validationError = ProjectWarning.validateEmployeeProject(employeeProject);
+
+        if (!validationError.isEmpty()) {
+            redirectAttributes.addFlashAttribute("failed", validationError);
+            return "redirect:/ines/showFormForAddProjectToEmployee/" + id;
         }
-        if (ProjectWarning.ifProjectEndDateIsNotSetCorrectly(employeeProjectEndDate)) {
-            redirectAttributes.addFlashAttribute("failed", "Employee project end date day must be the 14th or " +
-                    "the last day of the month. Please check dates entered.");
-            return "redirect:/ines/showFormForAddProjectToEmployee/{id}";
-        }
+
+        employeeProject.setEmployeeBookedMonths(
+                employeeService.getEmployeeBookedMonths(employeeProject.getEmployeeProjectStartDate(),
+                                                        employeeProject.getEmployeeProjectEndDate()));
 
 
         Employee updateEmployee = employeeService.getEmployeeById(id);
-        for (int i=0; i< projectIds.size(); i++) {
-            EmployeeProject employeeProject = new EmployeeProject(updateEmployee);
-            employeeProject.setEmployeeBookedMonths(monthList.get(i));
-            employeeProject.setProject(new Project(projectIds.get(i).getId()));
-            employeeProject.setEmployeeProjectName(projectIds.get(i).getName());
-            employeeProject.setEmployeeProjectStartDate(employeeProjectStartDate.get(i));
-            employeeProject.setEmployeeProjectEndDate(employeeProjectEndDate.get(i));
-            employeeProjectService.saveEmployeeProjectEmployeeOnly(employeeProject);
-        }
+        employeeService.saveEmployee(updateEmployee, employeeProject);
         return "redirect:/ines/employees";
     }
 
@@ -155,15 +147,22 @@ public class ProjectController {
 
     @PostMapping("/updateEmployeeProject/{id}")
     public String updateEmployeeProject(@PathVariable( value = "id") long id,
-                                        @ModelAttribute("employeeProject") EmployeeProject employee,
-                                        @RequestParam("employeeProjectStartDate") String employeeProjectStartDate,
-                                        @RequestParam("employeeProjectEndDate") String employeeProjectEndDate) {
+                                        @ModelAttribute("employeeProject") EmployeeProject employeeProjects,
+                                        RedirectAttributes redirectAttributes) {
+        String validationError = ProjectWarning.validateEmployeeProject(employeeProjects);
 
-        Double monthList = employeeService.getEmployeeBookedMonths(employeeProjectStartDate, employeeProjectEndDate);
+        if (!validationError.isEmpty()) {
+            redirectAttributes.addFlashAttribute("failed", validationError);
+            return "redirect:/ines/showNewEmployeeForm";
+        }
+
+        Double monthList =
+                employeeService.getEmployeeBookedMonths(employeeProjects.getEmployeeProjectStartDate(),
+                                                        employeeProjects.getEmployeeProjectEndDate());
 
         EmployeeProject updateEmployeeProject = employeeProjectService.getEmployeeProjectById(id);
-        updateEmployeeProject.setEmployeeProjectStartDate(employeeProjectStartDate);
-        updateEmployeeProject.setEmployeeProjectEndDate(employeeProjectEndDate);
+        updateEmployeeProject.setEmployeeProjectStartDate(employeeProjects.getEmployeeProjectStartDate());
+        updateEmployeeProject.setEmployeeProjectEndDate(employeeProjects.getEmployeeProjectEndDate());
         updateEmployeeProject.setEmployeeBookedMonths(monthList);
         employeeProjectService.saveEmployeeProject(updateEmployeeProject);
         return "redirect:/ines/employees";
@@ -188,26 +187,26 @@ public class ProjectController {
         return "project/employee_project_block";
     }
 
-    @PostMapping("/addProjectBlockToEmployee/{id}")
-    public String addProjectBlockToEmployee(@PathVariable( value = "id") long id,
-                                       @RequestParam("projectId") List<Project> projectIds,
-                                       @RequestParam("employeeProjectStartDate") List<String> employeeProjectStartDate,
-                                       @RequestParam("employeeProjectEndDate") List<String> employeeProjectEndDate) {
-
-        List<Double> monthList = employeeService.getListOfEmployeeBookedMonths(employeeProjectStartDate, employeeProjectEndDate);
-
-        Employee updateEmployee = employeeService.getEmployeeById(id);
-        for (int i=0; i< projectIds.size(); i++) {
-            EmployeeProject employeeProject = new EmployeeProject(updateEmployee);
-            employeeProject.setEmployeeBookedMonths(monthList.get(i));
-            employeeProject.setProject(new Project(projectIds.get(i).getId()));
-            employeeProject.setEmployeeProjectName(projectIds.get(i).getName());
-            employeeProject.setEmployeeProjectStartDate(employeeProjectStartDate.get(i));
-            employeeProject.setEmployeeProjectEndDate(employeeProjectEndDate.get(i));
-            employeeProjectService.saveEmployeeProjectEmployeeOnly(employeeProject);
-        }
-        return "redirect:/ines/showFormForProjectUpdate/{id}";
-    }
+//    @PostMapping("/addProjectBlockToEmployee/{id}")
+//    public String addProjectBlockToEmployee(@PathVariable( value = "id") long id,
+//                                       @RequestParam("projectId") List<Project> projectIds,
+//                                       @RequestParam("employeeProjectStartDate") List<String> employeeProjectStartDate,
+//                                       @RequestParam("employeeProjectEndDate") List<String> employeeProjectEndDate) {
+//
+//        List<Double> monthList = employeeService.getListOfEmployeeBookedMonths(employeeProjectStartDate, employeeProjectEndDate);
+//
+//        Employee updateEmployee = employeeService.getEmployeeById(id);
+//        for (int i=0; i< projectIds.size(); i++) {
+//            EmployeeProject employeeProject = new EmployeeProject(updateEmployee);
+//            employeeProject.setEmployeeBookedMonths(monthList.get(i));
+//            employeeProject.setProject(new Project(projectIds.get(i).getId()));
+//            employeeProject.setEmployeeProjectName(projectIds.get(i).getName());
+//            employeeProject.setEmployeeProjectStartDate(employeeProjectStartDate.get(i));
+//            employeeProject.setEmployeeProjectEndDate(employeeProjectEndDate.get(i));
+//            employeeProjectService.saveEmployeeProjectEmployeeOnly(employeeProject);
+//        }
+//        return "redirect:/ines/showFormForProjectUpdate/{id}";
+//    }
 
 
     @GetMapping("/projectPage/{pageNo}")
