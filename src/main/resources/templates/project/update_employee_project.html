@@ -9,18 +9,21 @@
 </head>
 <body>
 <div class="container">
-    <h4>Update Employee Project for: [[${employee.name}]]</h4>
+    <h3>Update Employee Project for: [[${employee.name}]]</h3>
+    <hr>
     <form action="#" th:action="@{/ines/updateEmployeeProject/{id}(id=${employeeProject.id})}"
           th:object="${employeeProject}"
           method="POST">
         <input type="hidden" th:field="*{id}" />
             <div>
                 <div class="form-group blu-margin">
-                    <label>Project Name: [[${employeeProject.employeeProjectName}]]</label>
-                    <input type="date" th:name="employeeProjectStartDate" th:value="${employeeProject.employeeProjectStartDate}"
-                           class="form-control mb-4 col-4">
-                    <input type="date" th:name="employeeProjectEndDate" th:value="${employeeProject.employeeProjectEndDate}"
-                           class="form-control mb-4 col-4">
+                    <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0">
+                        <label>Project Name: [[${employeeProject.employeeProjectName}]]</label>
+                        <input type="date" th:field="*{employeeProjectStartDate}"
+                               th:value="*{employeeProjectStartDate}" class="form-control col-8 mb-4">
+                        <input type="date" th:field="*{employeeProjectEndDate}"
+                               th:value="*{employeeProjectEndDate}" class="form-control col-8 mb-4">
+                    </div>
                 </div>
             </div>
         <button type="submit" class="btn btn-info col-2">Save Employee</button>
