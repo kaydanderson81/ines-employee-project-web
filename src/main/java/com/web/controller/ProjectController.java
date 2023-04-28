@@ -153,7 +153,7 @@ public class ProjectController {
 
         if (!validationError.isEmpty()) {
             redirectAttributes.addFlashAttribute("failed", validationError);
-            return "redirect:/ines/showNewEmployeeForm";
+            return "redirect:/ines/showFormForEmployeeProjectUpdate/" + id;
         }
 
         Double monthList =

@@ -11,27 +11,32 @@
 <div class="container">
     <h3>Update Employee Project for: [[${employee.name}]]</h3>
     <hr>
-    <form action="#" th:action="@{/ines/updateEmployeeProject/{id}(id=${employeeProject.id})}"
-          th:object="${employeeProject}"
-          method="POST">
-        <input type="hidden" th:field="*{id}" />
-            <div>
-                <div class="form-group blu-margin">
-                    <div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0">
-                        <label>Project Name: [[${employeeProject.employeeProjectName}]]</label>
-                        <input type="date" th:field="*{employeeProjectStartDate}"
-                               th:value="*{employeeProjectStartDate}" class="form-control col-8 mb-4">
-                        <input type="date" th:field="*{employeeProjectEndDate}"
-                               th:value="*{employeeProjectEndDate}" class="form-control col-8 mb-4">
-                    </div>
+    <div id="alert" class="alert alert-warning alert-dismissible date show" role="alert" th:text="${failed}" th:if="${failed}"></div>
+    <div class="row d-flex justify-content-evenly">
+        <div class="col-sm-10">
+            <form action="#" th:action="@{/ines/updateEmployeeProject/{id}(id=${employeeProject.id})}"
+                  th:object="${employeeProject}"
+                  method="POST">
+                <div class="row">
+                    <input type="hidden" th:field="*{id}" />
+                        <div class="col-sm-5">
+                            <label>Project Name: [[${employeeProject.employeeProjectName}]]</label>
+                            <input type="date" th:field="*{employeeProjectStartDate}"
+                                   th:value="*{employeeProjectStartDate}" class="form-control col-8 mb-4">
+                            <input type="date" th:field="*{employeeProjectEndDate}"
+                                   th:value="*{employeeProjectEndDate}" class="form-control col-8 mb-4">
+                        </div>
                 </div>
-            </div>
-        <button type="submit" class="btn btn-info col-2">Save Employee</button>
-    </form>
-
+                <button type="submit" class="btn btn-info col-2">Save Employee</button>
+            </form>
+        </div>
+    </div>
     <hr>
 
     <a th:href = "@{/ines/employees}"> Back to Employee List</a>
 </div>
+<script th:src="@{/js/employee.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery-3.6.0.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap/bootstrap.min.js}"></script>
 </body>
 </html>
