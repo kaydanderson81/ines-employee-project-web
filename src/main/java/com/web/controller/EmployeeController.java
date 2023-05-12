@@ -18,11 +18,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.*;
-import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.time.Year;
+import java.util.Comparator;
+import java.util.List;
 
 @Controller
 @RequestMapping("/ines")
@@ -53,7 +51,7 @@ public class EmployeeController {
 	}
 
 	@GetMapping("/employees")
-	public String viewEmployeesPage(Model model) throws ParseException {
+	public String viewEmployeesPage(Model model) {
 		List<Employee> employees = employeeService.getAllEmployees();
 		projectService.updateEmployeeProjectBookedMonths();
 
@@ -100,6 +98,7 @@ public class EmployeeController {
 		employeeProjects.setEmployeeBookedMonths(bookedMonths);
 
 		employeeService.saveEmployee(employee, employeeProjects);
+		redirectAttributes.addAttribute("updatedEmployeeId", employee.getId());
 		return "redirect:/ines/employees";
 	}
 
@@ -139,9 +138,14 @@ public class EmployeeController {
 	}
 
 	@GetMapping("/chart")
-	public String viewChartPage(Model model) throws ParseException {
-//		List<Employee> employees = employeeService.getAllEmployees();
-		ChartYear year = new ChartYear("2023");
+	public String viewChartPage(@RequestParam(value = "year", required = false) String selectedYear, Model model) {
+		ChartYear year;
+		if (selectedYear != null && !selectedYear.isEmpty()) {
+			year = new ChartYear(selectedYear);
+		} else {
+			year = new ChartYear(String.valueOf(Year.now()));
+		}
+
 		List<Employee> employees = employeeService.getAllEmployeesByEmployeeProjectStartDate(year);
 		employees.sort(Comparator.comparing(Employee::getLastName));
 		List<String> yearList = employeeProjectService.findAllStartAndEndDatesByYear();
@@ -150,42 +154,10 @@ public class EmployeeController {
 		model.addAttribute("employees", employees);
 		model.addAttribute("projects", projects);
 		model.addAttribute("yearList", yearList);
-		model.addAttribute("currentYear", Year.now());
-		return "chart.html";
-	}
-
-	@PostMapping("/chart")
-	public String reloadChartWithYear(@ModelAttribute("chartYear") ChartYear chartYear,
-									  Model model) throws InterruptedException, ParseException {
-		List<String> yearList = employeeProjectService.findAllStartAndEndDatesByYear();
-		List<Employee> employees = employeeService.getAllEmployeesByEmployeeProjectStartDate(chartYear);
-		List<Project> projects = projectService.getAListOfProjectsAndTheirPersonMonthsByYear(chartYear);
-		System.out.println("Employees: " + employees);
-		model.addAttribute("employees", employees);
-		model.addAttribute("projects", projects);
-		model.addAttribute("yearList", yearList);
-		model.addAttribute("currentYear", chartYear.getYear());
+		model.addAttribute("currentYear", year.getYear());
 
 		return "chart.html";
 	}
-
-
-//	@GetMapping("/chart/{year}")
-//	public String viewChartPage(@PathVariable (value = "year") ChartYear year,
-//								@ModelAttribute("chartYear") ChartYear selectedYear,
-//								Model model) {
-//
-//		List<Employee> employees = employeeService.getAllEmployeesByEmployeeProjectStartDate(selectedYear);
-//		System.out.println("Year: " + year);
-//		System.out.println("Selected Year: " + selectedYear);
-//
-//		List<String> yearList = employeeProjectService.findAllStartAndEndDatesByYear();
-//		model.addAttribute("employees", employees);
-//		model.addAttribute("yearList", yearList);
-//		model.addAttribute("currentYear", Year.now());
-//		model.addAttribute("selectedYear", selectedYear.getYear());
-//		return "chart.html";
-//	}
 
 
 }

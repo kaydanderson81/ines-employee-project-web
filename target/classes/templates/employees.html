@@ -17,8 +17,9 @@
 
 <a th:href = "@{/ines/showNewEmployeeForm}" class="btn btn-primary btn-sm mb-3"> Add Employee </a>
 	<div th:each="employee : ${listEmployees}">
-		<button class="accordion">
-			<div id="employeeDetails" class="row">
+		<button th:id="'employee-' + ${employee.id}" class="accordion"
+				th:classappend="${employee.id.toString() eq param.updatedEmployeeId} ? 'open' : ''">
+		<div id="employeeDetails" class="row">
 				<div id="name" class="col-sm-8">
 					<p><strong>Employee Name:</strong>
 						<a th:text="${employee.firstName + ' ' + employee.lastName}"></a>
@@ -68,8 +69,9 @@
 					<th class="col-sm-2" id="editRemoveProject">Edit Project/Remove Project from Employee</th>
 				</tr>
 
-				<tr th:each="proj : ${employee.employeeProjects}">
-					<td th:text="${proj.project.projectNumber}"></td>
+				<tr th:each="proj : ${employee.employeeProjects}" th:style="${proj.confirmBooking == false} ? 'color: #8d8989' : ''">
+
+				<td th:text="${proj.project.projectNumber}"></td>
 					<td th:text="${proj.project.name}"></td>
 					<td th:text="${proj.project.startDate}"></td>
 					<td th:text="${proj.project.endDate}"></td>

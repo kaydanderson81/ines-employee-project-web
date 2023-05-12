@@ -19,8 +19,15 @@
                   method="POST">
                 <div class="row">
                     <input type="hidden" th:field="*{id}" />
+                    <input type="hidden" th:field="*{employee.id}" />
                         <div class="col-sm-5">
-                            <label>Project Name: [[${employeeProject.employeeProjectName}]]</label>
+                            <p>
+                                <label>Project Name: [[${employeeProject.employeeProjectName}]]</label>
+                            </p>
+                            <p>
+                                <label>Booking confirmed?</label>
+                                <input type="checkbox" name="bookingConfirm" th:field="*{confirmBooking}" th:value="*{confirmBooking}">
+                            </p>
                             <input type="date" th:field="*{employeeProjectStartDate}"
                                    th:value="*{employeeProjectStartDate}" class="form-control col-8 mb-4">
                             <input type="date" th:field="*{employeeProjectEndDate}"

@@ -42,9 +42,8 @@ public class EmployeeProject implements Serializable {
     @Column(name = "project_name")
     private String employeeProjectName;
 
-//    @Column(name = "confirm_booking", nullable = false)
-////    @Transient
-//    private boolean confirmBooking = false;
+    @Column(name = "confirm_booking", nullable = false)
+    private boolean confirmBooking = false;
 
     public EmployeeProject() {}
 
@@ -83,7 +82,7 @@ public class EmployeeProject implements Serializable {
         this.employeeProjectStartDate = employeeProjectStartDate;
         this.employeeProjectEndDate = employeeProjectEndDate;
         this.employeeProjectName = employeeProjectName;
-//        this.confirmBooking = confirmBooking;
+        this.confirmBooking = confirmBooking;
     }
 
     public EmployeeProject(Long id, Employee employee, Project project, double employeeBookedMonths) {
@@ -149,13 +148,13 @@ public class EmployeeProject implements Serializable {
         this.employeeProjectName = employeeProjectName;
     }
 
-//    public boolean getConfirmBooking() {
-//        return confirmBooking;
-//    }
-//
-//    public void setConfirmBooking(boolean confirmBooking) {
-//        this.confirmBooking = confirmBooking;
-//    }
+    public boolean getConfirmBooking() {
+        return confirmBooking;
+    }
+
+    public void setConfirmBooking(boolean confirmBooking) {
+        this.confirmBooking = confirmBooking;
+    }
 
     @Override
     public boolean equals(Object o) {

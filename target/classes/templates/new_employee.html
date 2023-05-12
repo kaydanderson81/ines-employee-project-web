@@ -30,10 +30,10 @@
 					</div>
 					<div class="row">
 						<div class="col-sm-5">
-							<labe>First Name</labe>
+							<label>First Name</label>
 							<input type="text" th:field="*{firstName}"
 								   placeholder="First Name" required="required"  class="form-control col-8 mb-4">
-							<labe>Last Name</labe>
+							<label>Last Name</label>
 							<input type="text" th:field="*{lastName}"
 								   placeholder="Last Name" required="required"  class="form-control col-8 mb-4">
 							<label>Employee Contract Start Date</label>
@@ -49,15 +49,24 @@
 									<div id="projectToAdd" class="col-sm-12">
 											<div class="form-group blu-margin">
 												<div class="form-group blu-margin">
-													<select class="form-control col-8 mb-4" th:field="*{project}">
-														<option value="0">Select Project</option>
-														<option th:each="project : ${projects}" th:value="${project.id}" th:text="${project.name}"></option>
-													</select>
+													<div>
+														<select class="form-control col-6 mb-4" th:field="*{project}">
+															<option value="0">Select Project</option>
+															<option th:each="project : ${projects}" th:value="${project.id}" th:text="${project.name}"></option>
+														</select>
+
+													</div>
+													<div>
+														<label>Booking confirmed?</label>
+														<input type="checkbox" name="bookingConfirm" th:field="*{confirmBooking}">
+													</div>
+													<div>
+														<input type="date" th:field="*{employeeProjectStartDate}"
+															   th:value="${employeeProjectStartDate}" class="form-control col-6 mb-4">
+														<input type="date" th:field="*{employeeProjectEndDate}"
+															   th:value="${employeeProjectEndDate}" class="form-control col-6 mb-4">
+													</div>
 												</div>
-												<input type="date" th:field="*{employeeProjectStartDate}"
-													   th:value="${employeeProjectStartDate}" class="form-control col-6 mb-4">
-												<input type="date" th:field="*{employeeProjectEndDate}"
-													   th:value="${employeeProjectEndDate}" class="form-control col-6 mb-4">
 											</div>
 
 									</div>

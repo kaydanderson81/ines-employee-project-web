@@ -6,6 +6,7 @@ table {
 /*accordion*/
 .accordion {
   background-color: #eee;
+  border-radius: 15px;
   color: #444;
   cursor: pointer;
   padding: 18px;
