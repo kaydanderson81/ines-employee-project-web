@@ -13,9 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -138,37 +135,6 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<String> findAllStartAndEndDatesByYear() {
-        Set<String> startDates = projectRepository.findAllStartDates();
-        Set<String> endDates = projectRepository.findAllEndDates();
-        startDates.removeAll(Collections.singleton(""));
-        endDates.removeAll(Collections.singleton(""));
-
-        String minStartDate = Collections.min(startDates);
-        String maxEndDate = Collections.max(endDates);
-
-        List<String> yearList = new ArrayList<>();
-        DateFormat formater = new SimpleDateFormat("yyyy");
-
-        Calendar beginCalendar = Calendar.getInstance();
-        Calendar finishCalendar = Calendar.getInstance();
-
-        try {
-            beginCalendar.setTime(formater.parse(minStartDate));
-            finishCalendar.setTime(formater.parse(maxEndDate));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        while (beginCalendar.before(finishCalendar)) {
-            String date =     formater.format(beginCalendar.getTime()).toUpperCase();
-            yearList.add(date);
-            beginCalendar.add(Calendar.YEAR, 1);
-        }
-        return yearList;
-    }
-
-    @Override
     public Double getListOfEmployeeBookedMonths(String startDates, String endDates) {
         double monthsBetween = ChronoUnit.MONTHS.between(
                 LocalDate.parse(startDates),
@@ -181,9 +147,5 @@ public class ProjectServiceImpl implements ProjectService {
 
         return monthsBetween;
     }
-
-//    public List<Project> updateProjectBookedMonthsByYear(Long id) {
-//
-//    }
 
 }

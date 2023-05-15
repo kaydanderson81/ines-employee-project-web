@@ -13,55 +13,79 @@
 <body>
 <div th:replace="/fragments/chartNavbar :: navbar"></div>
 <div class="container">
-    <h1>Employee Management System</h1>
-    <hr>
     <div id="alert" class="alert alert-warning alert-dismissible date show" role="alert" th:text="${failed}" th:if="${failed}"></div>
 
     <form action="#" th:action="@{/ines/addProjectToEmployee/{id}(id=${employee.id})}" th:object="${employee}"
           method="POST">
         <input type="hidden" th:field="*{id}" />
-
-        <h2>Add Project to Employee: [[*{name}]]</h2>
-        <label>Current Projects: </label>
+        <div>
+            <h3>Add Project to Employee</h3>
+            <div>
+                <p>
+                    <label>Employee Name: [[${employee.name}]]</label>
+                </p>
+                <p>
+                    <label>Currently contracted from: [[${employee.contractedFrom}]] to [[${employee.contractedTo}]]</label>
+                </p>
+            </div>
+        </div>
+        <hr>
         <div class="container">
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-sm-7">
+                    <h4>Current Projects</h4>
+                </div>
+                <div class="col-sm-5">
+                    <h4>Add New Project</h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-7">
                     <table class="table table-responsive">
                         <tr>
                             <th>Project name:</th>
                             <th>Start date:</th>
                             <th>End date:</th>
+                            <th>Booking Confirmed:</th>
                         </tr>
                         <tr th:each="emplProj : ${employeeSavedProject}">
                             <td type="text" th:text="${emplProj.project.name}" th:value="${emplProj.id}"></td>
                             <td type="text" th:text="${emplProj.employeeProjectStartDate}" th:value="${emplProj.id}"></td>
                             <td type="text" th:text="${emplProj.employeeProjectEndDate}" th:value="${emplProj.id}"></td>
+                            <td th:switch="${emplProj.confirmBooking}">
+                                <span type="text" th:case="true">Yes</span>
+                                <span type="text" th:case="false">No</span>
+                            </td>
                         </tr>
                     </table>
                 </div>
-                <div class="col-sm-6">
-                    <label>Info: Tick the checkbox and add and employee's start and end date to save that particular
-                        project for the above employee.</label>
-                    <label>To add a separate block for a project already entered click here.</label>
-                    <a th:href="@{/ines/showFormForAddProjectBlockToEmployee/{id}(id=${employee.id})}" class="table-link success" >
-                        <span class="fa-stack">
-                            <i id="addProject" class="fa fa-square fa-stack-2x"></i>
-                            <i class="fa fa-square-plus fa-stack-1x fa-inverse" title="Add a Project to Employee"></i>
-                        </span>
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div class="container">
-            <div>
-                <label>Add projects: </label>
-                <div class="col-sm-6" th:each="project : ${projects}">
-                    <div class="form-group blu-margin">
-                        <input type="checkbox" th:name="projectId" th:text="${project.name}" th:value="${project.id}">
-                        <input type="date" th:name="employeeProjectStartDate" th:value="${employeeProjectStartDate}"
-                               class="form-control mb-4 col-4">
-                        <input type="date" th:name="employeeProjectEndDate" th:value="${employeeProjectEndDate}"
-                               class="form-control mb-4 col-4">
+                <div class="col-sm-5">
+                    <div class="container">
+                        <th:block th:object="${employeeProject}">
+                            <div id="projectToAdd" class="col-sm-12">
+                                <div class="form-group blu-margin">
+                                    <div class="form-group blu-margin">
+                                        <div class="form-group blu-margin">
+                                            <select class="form-control col-6 mb-4" th:field="*{project}">
+                                                <option value="0">Select Project</option>
+                                                <option th:each="project : ${projects}" th:value="${project.id}" th:text="${project.name}"></option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label>Booking confirmed?</label>
+                                            <input type="checkbox" name="bookingConfirm" th:field="*{confirmBooking}">
+                                        </div>
+                                        <div>
+                                            <input type="date" th:field="*{employeeProjectStartDate}"
+                                                   th:value="${employeeProjectStartDate}" class="form-control col-6 mb-4">
+                                            <input type="date" th:field="*{employeeProjectEndDate}"
+                                                   th:value="${employeeProjectEndDate}" class="form-control col-6 mb-4">
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </th:block>
                     </div>
                 </div>
             </div>

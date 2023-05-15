@@ -19,7 +19,6 @@ employeeProject no date set and allow multiple employeeProjects (once set, isnt 
 
 27-02-23
 Add project to employee in alphabetical order
-TODO: Fix chart year (add year to url {id})
 
 02-03-23
 Added padding and margin to addNewEmployee (seems to work, didn't work the first time)
@@ -39,7 +38,7 @@ Check name length in employees table
 12-4-23
 Added first and second name, employees ordered by last name and added accordion
 
-13-4-23
-TODO: When adding Project number error if not a number, big box for comment
+12-5-23
+Update add project to existing employee to have confirm booking, its replacing the existing employeeProject
 !!!!!Change database!!!!!!
 

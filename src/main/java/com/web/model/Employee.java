@@ -156,6 +156,10 @@ public class Employee {
 		this.employeeProjects = employeeProjects;
 	}
 
+	public void addEmployeeProjectToEmployee(EmployeeProject employeeProject) {
+		this.employeeProjects.add(employeeProject);
+	}
+
 	public void addEmployeeProject(EmployeeProject employeeProject) {
 		this.employeeProjects.add(employeeProject);
 		employeeProject.setEmployee(this);

@@ -13,7 +13,7 @@
 <body>
 	<div th:replace="/fragments/chartNavbar :: navbar"></div>
 	<div class="container">
-		<h2>Save Employee</h2>
+		<h3>Save Employee</h3>
 		<hr>
 		<div id="alert" class="alert alert-warning alert-dismissible date show" role="alert" th:text="${failed}" th:if="${failed}"></div>
 		<div class="row d-flex justify-content-evenly">
@@ -22,10 +22,18 @@
 					  method="POST">
 					<div class="row">
 						<div class="col-sm-5">
-							<labe>First Name</labe>
+							<h4>Employee Details</h4>
+						</div>
+						<div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0">
+							<h4>Project Details</h4>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-5">
+							<label>First Name</label>
 							<input type="text" th:field="*{firstName}"
 								   placeholder="First Name" required="required"  class="form-control col-8 mb-4">
-							<labe>Last Name</labe>
+							<label>Last Name</label>
 							<input type="text" th:field="*{lastName}"
 								   placeholder="Last Name" required="required"  class="form-control col-8 mb-4">
 							<label>Employee Contract Start Date</label>
@@ -35,31 +43,42 @@
 							<input type="date" th:field="*{contractedTo}"
 								   placeholder="Contracted To" required="required"  class="form-control col-8 mb-4">
 						</div>
-						<div class="col-sm-5 offset-sm-2 col-md-6 offset-md-0">
-							<h4>How to add an employee</h4>
-							<p>
-								Add employee name and start and end dates, then when assigning an employee to a project, tick the
-								project box and add the dates this employee will work on this project. You can add multiple projects
-								to one employee.
-							</p>
-							<p>
-								Click Save Employee once all information is added and projects are selected.
-							</p>
-						</div>
-					</div>
-					<hr>
-					<div class="row d-flex justify-content-around">
-						<div id="projectToAdd" class="col-sm-3" th:each="project : ${projects}">
-							<div class="form-group blu-margin">
-								<input type="checkbox" th:name="projectId" th:text="${project.name}" th:value="${project.id}">
-								<input type="date" th:name="employeeProjectStartDate" th:value="${employeeProjectStartDate}"
-									   class="form-control mb-4 col-9">
-								<input type="date" th:name="employeeProjectEndDate" th:value="${employeeProjectEndDate}"
-									   class="form-control mb-4 col-9">
+						<div class="col-sm-7">
+							<div class="row d-flex justify-content-around">
+								<th:block th:object="${employeeProjects}">
+									<div id="projectToAdd" class="col-sm-12">
+											<div class="form-group blu-margin">
+												<div class="form-group blu-margin">
+													<div>
+														<select class="form-control col-6 mb-4" th:field="*{project}">
+															<option value="0">Select Project</option>
+															<option th:each="project : ${projects}" th:value="${project.id}" th:text="${project.name}"></option>
+														</select>
+
+													</div>
+													<div>
+														<label>Booking confirmed?</label>
+														<input type="checkbox" name="bookingConfirm" th:field="*{confirmBooking}">
+													</div>
+													<div>
+														<input type="date" th:field="*{employeeProjectStartDate}"
+															   th:value="${employeeProjectStartDate}" class="form-control col-6 mb-4">
+														<input type="date" th:field="*{employeeProjectEndDate}"
+															   th:value="${employeeProjectEndDate}" class="form-control col-6 mb-4">
+													</div>
+												</div>
+											</div>
+
+									</div>
+								</th:block>
 							</div>
+							<p>
+								Click Save Employee once all employee and project information is added.
+							</p>
+							<button type="submit" id="saveButton" class="btn btn-info col-4">Save Employee</button>
 						</div>
 					</div>
-					<button type="submit" class="btn btn-info col-2">Save Employee</button>
+
 				</form>
 			</div>
 		</div>

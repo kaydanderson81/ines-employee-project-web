@@ -28,8 +28,9 @@ form input {
     max-width: 300px;
 }
 
-#commentTextarea {
+#commentTextArea {
     max-width: 700px;
+    height: 150px;
 }
 
 form .input-group-addon {

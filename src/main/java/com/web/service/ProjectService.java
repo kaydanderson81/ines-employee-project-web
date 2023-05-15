@@ -3,6 +3,7 @@ package com.web.service;
 import com.web.model.ChartYear;
 import com.web.model.Project;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -16,8 +17,6 @@ public interface ProjectService {
 
     List<Project> getAListOfProjectsAndTheirPersonMonthsByYear(ChartYear year);
     Page<Project> findPaginated(int pageNo, int pageSize, String sortField, String sortDirection);
-
-    List<String> findAllStartAndEndDatesByYear();
 
     Double getListOfEmployeeBookedMonths(String startDates, String endDates);
 }

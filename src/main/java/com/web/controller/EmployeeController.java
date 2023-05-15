@@ -97,7 +97,7 @@ public class EmployeeController {
 															  employeeProjects.getEmployeeProjectEndDate());
 		employeeProjects.setEmployeeBookedMonths(bookedMonths);
 
-		employeeService.saveEmployee(employee, employeeProjects);
+		employeeService.saveEmployeeAndEmployeeProject(employee, employeeProjects);
 		redirectAttributes.addAttribute("updatedEmployeeId", employee.getId());
 		return "redirect:/ines/employees";
 	}
@@ -111,7 +111,7 @@ public class EmployeeController {
 
 	@PostMapping("/updateEmployee/{id}")
 	public String updateEmployeeWithProjects(@PathVariable( value = "id") long id,
-											 @ModelAttribute("employee") Employee employee) {
+											 @ModelAttribute("employee") Employee employee, RedirectAttributes redirectAttributes) {
 		Employee updatedEmployee = employeeService.getEmployeeById(id);
 		updatedEmployee.setFirstName(employee.getFirstName());
 		updatedEmployee.setLastName(employee.getLastName());
@@ -121,7 +121,8 @@ public class EmployeeController {
 		if (employee.getContractedTo().isEmpty()) {
 			updatedEmployee.setContractedTo("Date not set");
 		}
-		employeeService.saveEmployee(updatedEmployee, null);
+		employeeService.saveEmployee(updatedEmployee);
+		redirectAttributes.addAttribute("updatedEmployeeId", updatedEmployee.getId());
 		return "redirect:/ines/employees";
 	}
 	
@@ -132,8 +133,10 @@ public class EmployeeController {
 	}
 
 	@GetMapping("/deleteEmployeeProject/{id}")
-	public String deleteEmployeeProject(@PathVariable (value = "id") long id) {
+	public String deleteEmployeeProject(@PathVariable (value = "id") long id, RedirectAttributes redirectAttributes) {
+		EmployeeProject employeeProject = employeeProjectService.getEmployeeProjectById(id);
 		this.employeeProjectService.deleteEmployeeProjectById(id);
+		redirectAttributes.addAttribute("updatedEmployeeId", employeeProject.getEmployee().getId());
 		return "redirect:/ines/employees";
 	}
 

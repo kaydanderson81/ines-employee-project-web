@@ -1,4 +1,4 @@
-console.log("List of projects: " + listProjects)
+//console.log("List of projects: " + listProjects)
 const projectLabels = listProjects.reduce(function(result, item) {
   result.push(item.name);
   return result;
@@ -33,7 +33,7 @@ const colorGenerator = function () {
 };
 
 const graph = document.getElementById('myBarChart');
-console.log(listProjects)
+//console.log(listProjects)
   new Chart(graph, {
     type: 'bar',
     data: {

@@ -101,7 +101,7 @@ public class ProjectController {
                         employeeProject.getEmployeeProjectEndDate()));
 
         Employee updateEmployee = employeeService.getEmployeeById(id);
-        employeeService.saveEmployee(updateEmployee, employeeProject);
+        employeeService.saveProjectToExistingEmployee(updateEmployee, employeeProject);
         redirectAttributes.addAttribute("updatedEmployeeId", employee.getId());
         return "redirect:/ines/employees";
     }
@@ -139,8 +139,10 @@ public class ProjectController {
     public String showFormForUpdateEmployeeProject(@PathVariable(value = "id") long id, Model model) {
         EmployeeProject employeeProject = employeeProjectService.getEmployeeProjectById(id);
         Employee employee = employeeService.getEmployeeById(employeeProject.getEmployee().getId());
+        List<EmployeeProject> findEmployeeProjects = employeeProjectRepository.findAllEmployeeProjectByEmployeeId(employee.getId());
         model.addAttribute("employee", employee);
         model.addAttribute("employeeProject", employeeProject);
+        model.addAttribute("employeeSavedProject", findEmployeeProjects);
         return "project/update_employee_project";
     }
 

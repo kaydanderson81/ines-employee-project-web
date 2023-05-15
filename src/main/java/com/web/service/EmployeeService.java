@@ -12,8 +12,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public interface EmployeeService {
 
 	List<Employee> getAllEmployees();
-	Employee saveEmployee(Employee employee, EmployeeProject employeeProject);
-//	void saveEmployeeWithProject(Employee employee, Long id);
+
+	Employee saveEmployee(Employee employee);
+	Employee saveEmployeeAndEmployeeProject(Employee employee, EmployeeProject employeeProject);
+
+	Employee saveProjectToExistingEmployee(Employee employee, EmployeeProject employeeProject);
+
 	Employee getEmployeeById(long id);
 	void deleteEmployeeById(long id);
 	List<Project> getAllProjects();

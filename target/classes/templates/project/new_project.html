@@ -22,7 +22,7 @@
             <form action="#" th:action="@{/ines/saveProject}" th:object="${project}"
                   method="POST">
                 <label>Project Serial Number</label>
-                <input type="text" th:field="*{projectNumber}"
+                <input type="number" th:field="*{projectNumber}"
                        placeholder="Project Number" class="form-control mb-4 col-6">
                 <label>Project Name</label>
                 <input type="text" th:field="*{name}"

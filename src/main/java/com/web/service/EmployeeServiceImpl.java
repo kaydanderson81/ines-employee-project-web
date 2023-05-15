@@ -47,17 +47,38 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public Employee saveEmployee(Employee employee, EmployeeProject employeeProject) {
+	public Employee saveEmployee(Employee employee) {
+		employee.setName(employee.getFirstName(), employee.getLastName());
+		return this.employeeRepository.save(employee);
+	}
+
+	@Override
+	public Employee saveEmployeeAndEmployeeProject(Employee employee, EmployeeProject employeeProject) {
 		employee.setName(employee.getFirstName(), employee.getLastName());
 		employeeProject.setEmployee(employee);
 		Project project = projectService.getProjectById(employeeProject.getProject().getId());
 		employeeProject.setProject(project);
 		employeeProject.setEmployeeProjectName(project.getName());
-		List<EmployeeProject> employeeProjects = new ArrayList<>();
+
+		List<EmployeeProject> employeeProjects = employee.getEmployeeProjects();
 		employeeProjects.add(employeeProject);
-		employee.setEmployeeProject(employeeProjects);
+
 		return this.employeeRepository.save(employee);
     }
+
+	@Override
+	public Employee saveProjectToExistingEmployee(Employee employee, EmployeeProject employeeProject) {
+		employee.setName(employee.getFirstName(), employee.getLastName());
+		employeeProject.setEmployee(employee);
+		Project project = projectService.getProjectById(employeeProject.getProject().getId());
+		employeeProject.setProject(project);
+		employeeProject.setEmployeeProjectName(project.getName());
+
+		employee.getEmployeeProjects().add(employeeProject);
+
+		return this.employeeRepository.save(employee);
+	}
+
 
 	@Override
 	public Employee getEmployeeById(long id) {
@@ -85,7 +106,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public void saveEmployeeProjectToEmployee(
 		Employee employee, List<Project> projectIds, List<Double> monthList,
 		List<String> employeeProjectStartDate, List<String> employeeProjectEndDate) {
-		saveEmployee(employee, null);
+		saveEmployee(employee);
 		for (int i=0; i< projectIds.size(); i++) {
 			EmployeeProject employeeProject = new EmployeeProject(employee);
 			employeeProject.setEmployeeBookedMonths(monthList.get(i));
@@ -93,11 +114,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 			employeeProject.setEmployeeProjectStartDate(employeeProjectStartDate.get(i));
 			employeeProject.setEmployeeProjectEndDate(employeeProjectEndDate.get(i));
 			employeeProject.setEmployeeProjectName(projectIds.get(i).getName());
-//			if (!confirmBookings.isEmpty()) {
-//				boolean confirmBooking = confirmBookings.get(i);
-//				employeeProject.setConfirmBooking(confirmBooking);
-//				// rest of the code
-//			}
 			employeeProjectService.saveEmployeeProjectEmployeeOnly(employeeProject);
 		}
 	}
