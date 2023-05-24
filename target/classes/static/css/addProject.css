@@ -1,9 +1,0 @@
-table td.fit,
-table th.fit {
-    white-space: nowrap;
-    width: 1%;
-}
-
-#addProject {
-    color: #3bb923;
-}
